@@ -44,8 +44,6 @@ async function changeFileSSH({
             resolve({
               success: true,
             });
-          }).on('data', (data) => {
-            console.log(`OUTPUT: ${data}`);
           });
       });
     });
