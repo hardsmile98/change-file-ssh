@@ -1,31 +1,74 @@
-function changeFileSSH({
-    ip,
-    port = 22,
-    user,
-    password,
-    path,
-    content
-}) {
-    if(!ip || !user || !password || !path || !content)  {
-        return {
-            success: false,
-            message: (!ip && 'ip parameter not specified') 
-                || (!user && 'user parameter not specified')
-                || (!password && 'password parameter not specified')
-                || (!path && 'path parameter not specified')
-                || (!content && 'content parameter not specified')
-        }
-    }
+const { Client } = require('ssh2');
 
-    return { success: true }
+async function changeFileSSH({
+  host,
+  port = 22,
+  username,
+  password,
+  path,
+  content,
+}) {
+  if (!host || !username || !password || !path || !content) {
+    return {
+      success: false,
+      message: (!host && 'host parameter not specified')
+        || (!username && 'username parameter not specified')
+        || (!password && 'password parameter not specified')
+        || (!path && 'path parameter not specified')
+        || (!content && 'content parameter not specified'),
+    };
+  }
+
+  const sshClient = new Client();
+  sshClient.connect({
+    host,
+    port,
+    username,
+    password,
+  });
+
+  return new Promise((resolve) => {
+    sshClient.on('ready', () => {
+      sshClient.exec(`ls ${path};`, (err, stream) => {
+        if (err) {
+          resolve({
+            succes: false,
+            message: err.message,
+          });
+        }
+
+        stream
+          .on('close', () => {
+            sshClient.end();
+
+            resolve({
+              success: true,
+            });
+          }).on('data', (data) => {
+            console.log(`OUTPUT: ${data}`);
+          });
+      });
+    });
+
+    sshClient.on('error', (error) => {
+      resolve({
+        message: error.message,
+        success: false,
+      });
+    });
+  });
 }
 
-const xxx = changeFileSSH({
-    ip: '31.129.108.202',
-    user: 'root',
+const start = async () => {
+  const result = await changeFileSSH({
+    host: '31.129.108.202',
+    username: 'root',
     password: 'KEr%TqoT5QiW',
     path: '/tmp/filename.txt',
-    content: '12345'
-})
+    content: '12345',
+  });
 
-console.log(xxx);
+  console.log(result);
+};
+
+start();
