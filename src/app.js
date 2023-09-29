@@ -1,6 +1,6 @@
 const { Client } = require('ssh2');
 
-async function changeFileSSH({
+async function changeFileBySSH({
   host,
   port = 22,
   username,
@@ -61,7 +61,7 @@ async function changeFileSSH({
 }
 
 const start = async () => {
-  const result = await changeFileSSH({
+  const result = await changeFileBySSH({
     host: '-',
     username: '-',
     password: '-',
