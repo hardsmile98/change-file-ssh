@@ -59,11 +59,11 @@ async function changeFileSSH({
 
 const start = async () => {
   const result = await changeFileSSH({
-    host: '31.129.108.202',
-    username: 'root',
-    password: 'KEr%TqoT5QiW',
+    host: '-',
+    username: '-',
+    password: '-',
     path: '/tmp/filename.txt',
-    content: 'test_line1\ntest_line2\nend',
+    content: 'test\ntest1',
   });
 
   console.log(result);
