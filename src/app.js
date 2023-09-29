@@ -29,7 +29,7 @@ async function changeFileSSH({
 
   return new Promise((resolve) => {
     sshClient.on('ready', () => {
-      sshClient.exec(`ls ${path};`, (err, stream) => {
+      sshClient.exec(`ls ${path}; `, (err, stream) => {
         if (err) {
           resolve({
             succes: false,
@@ -64,7 +64,7 @@ const start = async () => {
     host: '31.129.108.202',
     username: 'root',
     password: 'KEr%TqoT5QiW',
-    path: '/tmp/filename.txt',
+    path: '/tmp',
     content: '12345',
   });
 
