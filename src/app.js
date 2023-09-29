@@ -29,23 +29,26 @@ async function changeFileSSH({
 
   return new Promise((resolve) => {
     sshClient.on('ready', () => {
-      sshClient.exec(`echo "${content}" > ${path}`, (err, stream) => {
-        if (err) {
-          resolve({
-            succes: false,
-            message: err.message,
-          });
-        }
-
-        stream
-          .on('close', () => {
-            sshClient.end();
-
+      sshClient.exec(
+        `echo "${content}" > ${path}`,
+        (err, stream) => {
+          if (err) {
             resolve({
-              success: true,
+              succes: false,
+              message: err.message,
             });
-          }).on('data', () => {});
-      });
+          }
+
+          stream
+            .on('close', () => {
+              sshClient.end();
+
+              resolve({
+                success: true,
+              });
+            }).on('data', () => {});
+        },
+      );
     });
 
     sshClient.on('error', (error) => {
