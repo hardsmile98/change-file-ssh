@@ -104,9 +104,7 @@ async function commandBySSH({
               resolve({
                 success: true,
               });
-            }).on('data', (data) => {
-              console.log(`OUTPUT: ${data}`);
-            });
+            }).on('data', () => {});
         },
       );
     });
